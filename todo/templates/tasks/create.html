@@ -7,7 +7,7 @@
 {% block content %}
   <form method="post">
     <div class="mb-3">
-        <label for="username" class="form-label">New Task</label>
+        <label for="task" class="form-label">New Task</label>
         <textarea name="task" class="form-control">{{ request.form['task'] }}</textarea>
     </div> 
     <button type="submit" class="btn btn-dark">Add task</button>

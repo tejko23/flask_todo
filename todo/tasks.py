@@ -1,6 +1,7 @@
 from flask import (
     Blueprint, session, flash, g, redirect, render_template, request, url_for
 )
+from werkzeug.exceptions import abort
 
 from todo.auth import login_required
 from todo.db import get_db
@@ -40,3 +41,56 @@ def create():
             return redirect(url_for('tasks.index'))
 
     return render_template('tasks/create.html')
+
+
+def get_task(id, check_author=True):
+    task = get_db().execute(
+        'SELECT t.task_id, user_id, task' 
+        ' FROM tasks t JOIN user u ON t.user_id = u.id '
+        ' WHERE t.task_id = ?',
+        (id,)
+    ).fetchone()
+
+    if task is None:
+        abort(404, f"Post id {id} doesn't exist.")
+    
+    if check_author and task['user_id'] != g.user['id']:
+        abort(403)
+
+    return task
+
+
+@bp.route('/<int:id>/update', methods=('GET', 'POST'))
+@login_required
+def update(id):
+    task_data = get_task(id)
+
+    if request.method == 'POST':
+        task = request.form['task']
+        error = None
+
+        if not task:
+            error = 'You need to add text in the task field.'
+
+        if error is not None:
+            flash(error)
+        else:
+            db = get_db()
+            db.execute(
+                "UPDATE tasks SET task = ? WHERE task_id = ?", 
+                (task, id)
+            )
+            db.commit()
+            return redirect(url_for('tasks.index'))
+
+    return render_template('tasks/update.html', task_data=task_data)
+
+
+@bp.route('/<int:id>/delete', methods=('POST',))
+@login_required
+def delete(id):
+    get_task(id)
+    db = get_db()
+    db.execute('DELETE FROM tasks WHERE task_id = ?', (id,))
+    db.commit()
+    return redirect(url_for('tasks.index'))
