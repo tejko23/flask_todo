@@ -14,7 +14,7 @@ def index():
     user_id = session.get('user_id')
     db = get_db()
     tasks_list = db.execute(
-        "SELECT * FROM tasks WHERE user_id = ?", (user_id,)
+        "SELECT * FROM tasks WHERE user_id = ? AND completed = ?", (user_id, 0,)
         ).fetchall()
     return render_template('tasks/index.html', tasks_list=tasks_list)
 
@@ -92,5 +92,15 @@ def delete(id):
     get_task(id)
     db = get_db()
     db.execute('DELETE FROM tasks WHERE task_id = ?', (id,))
+    db.commit()
+    return redirect(url_for('tasks.index'))
+
+
+@bp.route('/<int:id>/done', methods=('POST',))
+@login_required
+def complete(id):
+    get_task(id)
+    db = get_db()
+    db.execute('UPDATE tasks SET completed = 1 WHERE task_id = ?', (id,))
     db.commit()
     return redirect(url_for('tasks.index'))

@@ -27,7 +27,13 @@
               <th scope="row">{{ loop.index }}</th>
               <td>{{ task['task'] }}</td>
               <td>
-                <a class="btn btn-success" href="#" role="button">Done</a>
+                <form action="{{ url_for('tasks.complete', id=task['task_id']) }}"
+                      method="post">
+                    <button type="submit" 
+                            formmethod="post"
+                            class="btn btn-success">Done
+                    </button>
+                </form>
               </td>
               <td>
                 <a class="btn btn-secondary" 
