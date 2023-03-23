@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1 class="mb-3 text-center">
+    {% block title %}Edit "{{ task_data['task'][:10] }}..."{% endblock %}
+  </h1>
+{% endblock %}
+
+{% block content %}
+  <form id="editForm" method="post">
+    <div class="mb-3">
+        <label for="task" class="form-label">Edit task</label>
+        <textarea name="task" class="form-control">{{ request.form['task'] or task_data['task'] }}</textarea>
+    </div> 
+  </form>
+  <form id="deleteForm"
+        action="{{ url_for('tasks.delete', id=task_data['task_id']) }}"
+        method="post">
+  </form>
+    <button type="submit" 
+            form="editForm" 
+            class="btn btn-dark">Accept changes</button>
+    <button type="submit" 
+        formmethod="post"
+        form="deleteForm"
+        class="btn btn-danger"
+        onclick="return confirm('Are you sure?');">Delete task
+    </button>
+{% endblock %}
