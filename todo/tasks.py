@@ -1,5 +1,6 @@
 from flask import (
-    Blueprint, session, flash, g, redirect, render_template, request, url_for
+    Blueprint, session, flash, g, redirect, render_template, request, url_for,
+    get_template_attribute
 )
 from werkzeug.exceptions import abort
 
@@ -17,6 +18,29 @@ def index():
         "SELECT * FROM tasks WHERE user_id = ? AND completed = ?", (user_id, 0,)
         ).fetchall()
     return render_template('tasks/index.html', tasks_list=tasks_list)
+
+
+@bp.route('/tables', methods=['POST'])
+@login_required
+def tables():
+    user_id = session.get('user_id')
+    db = get_db()
+    table = request.form['table']
+    if table == "todo":
+        tasks_list = db.execute(
+            "SELECT * FROM tasks WHERE user_id = ? AND completed = ?", (user_id, 0,)
+            ).fetchall()
+        todo = get_template_attribute('tasks/tables.html', 'todo')
+        return todo(tasks_list)
+        
+    elif table == "completed":
+        tasks_list = db.execute(
+            "SELECT * FROM tasks WHERE user_id = ? AND completed = ?", (user_id, 1,)
+            ).fetchall()
+        completed = get_template_attribute('tasks/tables.html', 'completed')
+        return completed(tasks_list)
+    else:
+        return None
 
 
 @bp.route('/create', methods=('GET', 'POST'))
