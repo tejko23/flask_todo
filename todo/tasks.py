@@ -39,6 +39,14 @@ def tables():
             ).fetchall()
         completed = get_template_attribute('tasks/tables.html', 'completed')
         return completed(tasks_list)
+
+    elif table == "all":
+        tasks_list = db.execute(
+            "SELECT * FROM tasks WHERE user_id = ?", (user_id,)
+            ).fetchall()
+        all_tasks = get_template_attribute('tasks/tables.html', 'all_tasks')
+        return all_tasks(tasks_list)
+
     else:
         return None
 
