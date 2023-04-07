@@ -30,25 +30,19 @@ def tables():
         tasks_list = db.execute(
             "SELECT * FROM tasks WHERE user_id = ? AND completed = ?", (user_id, 0,)
             ).fetchall()
-        todo = get_template_attribute('tasks/tables.html', 'todo')
-        return todo(tasks_list)
-        
     elif table == "completed":
         tasks_list = db.execute(
             "SELECT * FROM tasks WHERE user_id = ? AND completed = ?", (user_id, 1,)
             ).fetchall()
-        completed = get_template_attribute('tasks/tables.html', 'completed')
-        return completed(tasks_list)
-
     elif table == "all":
         tasks_list = db.execute(
             "SELECT * FROM tasks WHERE user_id = ?", (user_id,)
             ).fetchall()
-        all_tasks = get_template_attribute('tasks/tables.html', 'all_tasks')
-        return all_tasks(tasks_list)
-
     else:
-        return None
+        tasks_list = []
+        
+    tasks_table = get_template_attribute('tasks/tables.html', 'tasks_table')
+    return tasks_table(tasks_list)
 
 
 @bp.route('/create', methods=('GET', 'POST'))

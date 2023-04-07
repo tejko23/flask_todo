@@ -41,8 +41,8 @@
   
 
   <div id="table-container">
-    {% from 'tasks/tables.html' import todo %}
-    {{ todo(tasks_list) }}
+    {% from 'tasks/tables.html' import tasks_table %}
+    {{ tasks_table(tasks_list) }}
   </div>
 
 {% endblock %}
