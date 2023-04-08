@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1 class="mb-3 text-center">{% block title %}New Post{% endblock %}</h1>
+  <h1 class="mb-3 text-center">{% block title %}New Task{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -10,6 +10,18 @@
         <label for="task" class="form-label">New Task</label>
         <textarea name="task" class="form-control">{{ request.form['task'] }}</textarea>
     </div> 
+    <div class="form-check form-switch mb-3">
+      <input class="form-check-input" type="checkbox" role="switch" id="due-date-switch">
+      <label class="form-check-label" for="flexSwitchCheckDefault">Due date</label>
+    </div>
+    <div class="mb-3" id="due-date" style="display:none;">
+      <label for="due-date">Due date</label>
+      <input type="date" id="due-date-input" name="due-date" placeholder="dd-mm-yyyy"
+             value="" min="2020-01-01" max="2040-12-12">
+    </div>
     <button type="submit" class="btn btn-dark">Add task</button>
   </form>
+
+  <script src="{{ url_for('static', filename='due_date_switch.js') }}"></script>
+  
 {% endblock %}

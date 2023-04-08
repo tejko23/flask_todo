@@ -4,7 +4,8 @@
     <thead>
       <tr>
         <th scope="col" style="width:5%">#</th>
-        <th scope="col" style="width:65%">Task</th>
+        <th scope="col" style="width:55%">Task</th>
+        <th scope="col" style="width:10%">Due date</th>
         <th scope="col" style="width:10%">Done</th>
         <th scope="col" style="width:10%">Edit</th>
         <th scope="col" style="width:10%">Delete</th>
@@ -16,6 +17,10 @@
           <tr>
             <th scope="row">{{ loop.index }}</th>
             <td>{{ task['task'] }}</td>
+            <td>{% if task['due_date'] %}
+                  {{ task['due_date'] }}
+                {% endif %}
+            </td>
             <td>
               {% if not task['completed'] %}
                 <form action="{{ url_for('tasks.complete', id=task['task_id']) }}"
@@ -30,9 +35,14 @@
               {% endif %}
             </td>
             <td>
+              {% if not task['completed'] %}
               <a class="btn btn-secondary" 
                  href="{{ url_for('tasks.update', id=task['task_id']) }}" 
                  role="button">Edit</a>
+              {% else %}
+              <a class="btn btn-secondary disabled" 
+                 role="button" aria-disabled="true">Edit</a>
+              {% endif %}
             </td>
             <td>
               <form action="{{ url_for('tasks.delete', id=task['task_id']) }}"

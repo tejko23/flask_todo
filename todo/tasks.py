@@ -7,6 +7,8 @@ from werkzeug.exceptions import abort
 from todo.auth import login_required
 from todo.db import get_db
 
+from datetime import datetime
+
 bp = Blueprint('tasks', __name__)
 
 @bp.route('/')
@@ -51,6 +53,13 @@ def create():
     if request.method == 'POST':
         task = request.form['task']
         error = None
+        if request.form['due-date']:
+            due_date = request.form['due-date']
+            today = datetime.today().date()
+            if datetime.strptime(due_date, "%Y-%m-%d").date() < today:
+                error = 'The date cannot be earlier than today.'
+        else:
+            due_date = None
 
         if not task:
             error = 'You need to add text in the task field.'
@@ -60,8 +69,8 @@ def create():
         else:
             db = get_db()
             db.execute(
-                "INSERT INTO tasks (user_id, task) VALUES (?, ?)", 
-                (g.user['id'], task)
+                "INSERT INTO tasks (user_id, task, due_date) VALUES (?, ?, ?)", 
+                (g.user['id'], task, due_date)
             )
             db.commit()
             return redirect(url_for('tasks.index'))
@@ -71,7 +80,7 @@ def create():
 
 def get_task(id, check_author=True):
     task = get_db().execute(
-        'SELECT t.task_id, user_id, task' 
+        'SELECT t.task_id, user_id, task, due_date' 
         ' FROM tasks t JOIN user u ON t.user_id = u.id '
         ' WHERE t.task_id = ?',
         (id,)
@@ -94,6 +103,13 @@ def update(id):
     if request.method == 'POST':
         task = request.form['task']
         error = None
+        if request.form['due-date']:
+            due_date = request.form['due-date']
+            today = datetime.today().date()
+            if datetime.strptime(due_date, "%Y-%m-%d").date() < today:
+                error = 'The date cannot be earlier than today.'
+        else:
+            due_date = None
 
         if not task:
             error = 'You need to add text in the task field.'
@@ -103,8 +119,8 @@ def update(id):
         else:
             db = get_db()
             db.execute(
-                "UPDATE tasks SET task = ? WHERE task_id = ?", 
-                (task, id)
+                "UPDATE tasks SET task = ?, due_date = ? WHERE task_id = ?", 
+                (task, due_date, id)
             )
             db.commit()
             return redirect(url_for('tasks.index'))
