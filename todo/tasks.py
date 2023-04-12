@@ -28,20 +28,21 @@ def tables():
     user_id = session.get('user_id')
     db = get_db()
     table = request.form['table']
-    if table == "todo":
-        tasks_list = db.execute(
-            "SELECT * FROM tasks WHERE user_id = ? AND completed = ?", (user_id, 0,)
-            ).fetchall()
-    elif table == "completed":
-        tasks_list = db.execute(
-            "SELECT * FROM tasks WHERE user_id = ? AND completed = ?", (user_id, 1,)
-            ).fetchall()
-    elif table == "all":
-        tasks_list = db.execute(
-            "SELECT * FROM tasks WHERE user_id = ?", (user_id,)
-            ).fetchall()
-    else:
-        tasks_list = []
+    match table:
+        case "todo":
+            tasks_list = db.execute(
+                "SELECT * FROM tasks WHERE user_id = ? AND completed = ?", (user_id, 0,)
+                ).fetchall()
+        case "completed":
+            tasks_list = db.execute(
+                "SELECT * FROM tasks WHERE user_id = ? AND completed = ?", (user_id, 1,)
+                ).fetchall()
+        case "all":
+            tasks_list = db.execute(
+                "SELECT * FROM tasks WHERE user_id = ?", (user_id,)
+                ).fetchall()
+        case _:
+            tasks_list = []
         
     tasks_table = get_template_attribute('tasks/tables.html', 'tasks_table')
     return tasks_table(tasks_list)
