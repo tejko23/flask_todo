@@ -8,7 +8,7 @@
         <th scope="col" style="width:10%">Due date</th>
         <th scope="col" style="width:10%">Done</th>
         <th scope="col" style="width:10%">Edit</th>
-        <th scope="col" style="width:10%">Delete</th>
+        <th class="d-none d-sm-table-cell" scope="col" style="width:10%">Delete</th>
       </tr>
     </thead>
 
@@ -45,7 +45,7 @@
                  role="button" aria-disabled="true">Edit</a>
               {% endif %}
             </td>
-            <td>
+            <td class="d-none d-sm-table-cell">
               <form action="{{ url_for('tasks.delete', id=task['task_id']) }}"
                     method="post">
                   <button type="submit" 
