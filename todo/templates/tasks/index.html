@@ -13,16 +13,14 @@
 
   <form method="POST">
     <select id="tables" class="form-select m-2">
-      <option selected value="todo">To Do</option>
+      <option selected value="todo">To do</option>
+      <option value="todo_today">To do today</option>
       <option value="completed">Completed</option>
       <option value="all">All</option>
     </select>
   </form>
-
   
-  
-  <div class="container-fluid d-flex flex-column justify-content-center" 
-      id="table-container">
+  <div class="table-responsive" id="table-container">
     {% from 'tasks/tables.html' import tasks_table %}
     {{ tasks_table(tasks_list) }}
   </div>
