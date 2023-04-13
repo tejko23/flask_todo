@@ -31,16 +31,15 @@ def tables():
     match table:
         case "todo":
             tasks_list = db.execute(
-                "SELECT * FROM tasks WHERE user_id = ? AND completed = ?", (user_id, 0,)
-                ).fetchall()
+                "SELECT * FROM tasks WHERE user_id = ? AND completed = ?", 
+                (user_id, 0,)).fetchall()
         case "completed":
             tasks_list = db.execute(
-                "SELECT * FROM tasks WHERE user_id = ? AND completed = ?", (user_id, 1,)
-                ).fetchall()
+                "SELECT * FROM tasks WHERE user_id = ? AND completed = ?", 
+                (user_id, 1,)).fetchall()
         case "all":
             tasks_list = db.execute(
-                "SELECT * FROM tasks WHERE user_id = ?", (user_id,)
-                ).fetchall()
+                "SELECT * FROM tasks WHERE user_id = ?", (user_id,)).fetchall()
         case _:
             tasks_list = []
         

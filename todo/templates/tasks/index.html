@@ -19,12 +19,15 @@
     </select>
   </form>
 
-  <script src="{{ url_for('static', filename='table_select.js') }}" 
-          data-url="{{ url_for('tasks.tables') }}"></script>
   
-  <div id="table-container">
+  
+  <div class="container-fluid d-flex flex-column justify-content-center" 
+      id="table-container">
     {% from 'tasks/tables.html' import tasks_table %}
     {{ tasks_table(tasks_list) }}
   </div>
+
+  <script src="{{ url_for('static', filename='table_select.js') }}" 
+          data-url="{{ url_for('tasks.tables') }}"></script>
 
 {% endblock %}

@@ -17,9 +17,10 @@
           <tr>
             <th scope="row">{{ loop.index }}</th>
             <td>{{ task['task'] }}</td>
-            <td>{% if task['due_date'] %}
-                  {{ task['due_date'] }}
-                {% endif %}
+            <td class="td-due-date">
+              {%- if task['due_date'] -%}
+                {{ task['due_date'] }}
+              {%- endif -%}
             </td>
             <td>
               {% if not task['completed'] %}
@@ -58,6 +59,15 @@
       {% endfor %}
     </tbody>
   </table>
+  <div class="card text-bg-dark mb-3 mx-auto" style="max-width: 18rem;">
+    <div class="card-header">Color explanation</div>
+    <div class="card-body">
+      <p class="card-text text-warning">The due date is today.</p>
+      <p class="card-text text-danger">The due date has passed.</p>
+      <p class="card-text">
+        There is still some time left before the deadline.</p>
+    </div>
+  </div>
 {% else %}
   <div class="alert alert-info" role="alert">
     Sorry! No tasks to show. Let's add new task!
