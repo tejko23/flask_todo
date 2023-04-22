@@ -1,0 +1,4 @@
+include todo/schema.sql
+graft todo/static
+graft todo/templates
+global-exclude *.pyc

@@ -35,7 +35,6 @@ def tables():
                 (user_id, 0,)).fetchall()
         case "todo_today":
             today = datetime.today().date()
-            print(today)
             tasks_list = db.execute(
                 "SELECT * FROM tasks WHERE user_id = ? AND completed = ? AND due_date = ?", 
                 (user_id, 0, today,)).fetchall()
