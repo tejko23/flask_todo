@@ -1,0 +1,22 @@
+[project]
+name = "todo"
+version = "1.0.0"
+description = """\
+    A simple web application to manage your to-do list. \
+    The application is built using Flask.\
+    """
+dependencies = [
+    "flask",
+]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=. --cov-report html"
+
+[tool.coverage.run]
+branch = true
+source = ["todo"]
